@@ -33,7 +33,7 @@ class XSCLoaderPluginConan(ConanFile):
     default_options = {"shared": True, "fPIC": True}
 
     # Data plugin dependencies
-    requires = ("XSCTreeData/latest@lkeb/stable", "XSCTreeMetaData/latest@lkeb/stable")
+    #requires = ("XSCTreeData/latest@lkeb/stable", "XSCTreeMetaData/latest@lkeb/stable")
 
     # Qt requirement is inherited from hdps-core
 
@@ -51,6 +51,32 @@ class XSCLoaderPluginConan(ConanFile):
         print(f"git info from {path}")
         return path
 
+    def _dependency_channel(self):
+        branch = (
+            os.getenv("GITHUB_HEAD_REF")
+            or os.getenv("GITHUB_REF_NAME")
+        )
+
+        if not branch:
+            branch = subprocess.check_output(
+                [
+                    "git",
+                    "-C",
+                    self.__get_git_path(),
+                    "rev-parse",
+                    "--abbrev-ref",
+                    "HEAD",
+                ],
+                text=True,
+            ).strip()
+
+        self.output.info(f"Detected branch: {branch}")
+
+        if branch in ("main", "master", "HEAD"):
+            return "latest"
+
+        return branch.rsplit("/", 1)[-1]
+
     def export(self):
         print("In export")
         # save the original source path to the directory used to build the package
@@ -66,8 +92,15 @@ class XSCLoaderPluginConan(ConanFile):
         # print(f"Got version: {self.version}")
 
     def requirements(self):
+        channel = self._dependency_channel()
+
+        self.output.info(f"Using XSCTreeData channel: {channel}")
+
+        self.requires(f"XSCTreeData/{channel}@lkeb/stable")
+        self.requires(f"XSCTreeMetaData/{channel}@lkeb/stable")
+
         branch_info = PluginBranchInfo(self.__get_git_path())
-        print(f"Core requirement {branch_info.core_requirement}")
+        self.output.info(f"Core requirement {branch_info.core_requirement}")
         self.requires(branch_info.core_requirement)
 
     def configure(self):
