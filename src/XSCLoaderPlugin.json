@@ -1,0 +1,5 @@
+{
+  "name": "XSCLoader",
+  "version": "1.0",
+  "dependencies": [ "Points", "Cluster" ,"XSCTree", "XSCTreeMeta"]
+}

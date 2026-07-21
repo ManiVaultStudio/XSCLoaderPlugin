@@ -1,5 +1,0 @@
-{
-  "name": "CrossSpeciesComparisonLoader",
-  "version": "1.0",
-  "dependencies": [ "Points", "Cluster" ,"CrossSpeciesComparisonTree", "CrossSpeciesComparisonTreeMeta"]
-}

@@ -8,7 +8,7 @@ from rules_support import PluginBranchInfo
 from conans import tools
 import shutil
 
-class CrossSpeciesComparisonLoaderPluginConan(ConanFile):
+class XSCLoaderPluginConan(ConanFile):
     """Class to package using conan
 
     Packages both RELEASE and RELWITHDEBINFO.
@@ -17,10 +17,10 @@ class CrossSpeciesComparisonLoaderPluginConan(ConanFile):
     as described in https://github.com/ManiVaultStudio/core/wiki/Branch-naming-rules
     """
 
-    name = "CrossSpeciesComparisonLoaderPlugin"
-    description = """Viewer of cell CrossSpeciesComparisonTreeData and tree metadata data as described in a .swc file."""
-    topics = ("manivault", "plugin", "view", "CrossSpeciesComparisonLoaderPlugin")
-    url = "https://github.com/ManiVaultStudio/CrossSpeciesComparisonLoaderPlugin"
+    name = "XSCLoaderPlugin"
+    description = """Viewer of cell XSCTreeData and tree metadata data as described in a .swc file."""
+    topics = ("manivault", "plugin", "view", "XSCLoaderPlugin")
+    url = "https://github.com/ManiVaultStudio/XSCLoaderPlugin"
     author = "julianthijssen@gmail.com"  # conan recipe author
     license = "LGPL 3.0"
 
@@ -33,13 +33,13 @@ class CrossSpeciesComparisonLoaderPluginConan(ConanFile):
     default_options = {"shared": True, "fPIC": True}
 
     # Data plugin dependencies
-    requires = ("CrossSpeciesComparisonTreeData/latest@lkeb/stable", "CrossSpeciesComparisonTreeMetaData/latest@lkeb/stable")
+    requires = ("XSCTreeData/latest@lkeb/stable", "XSCTreeMetaData/latest@lkeb/stable")
 
     # Qt requirement is inherited from hdps-core
 
     scm = {
         "type": "git",
-        "subfolder": "hdps/CrossSpeciesComparisonLoaderPlugin",
+        "subfolder": "hdps/XSCLoaderPlugin",
         "url": "auto",
         "revision": "auto",
     }
@@ -106,9 +106,9 @@ class CrossSpeciesComparisonLoaderPluginConan(ConanFile):
         tc.variables["ManiVault_DIR"] = manivault_dir
         
         # Give the installation directory to CMake
-        MV_CSCTD_PATH = pathlib.Path(self.deps_cpp_info["CrossSpeciesComparisonTreeData"].rootpath).as_posix()
+        MV_CSCTD_PATH = pathlib.Path(self.deps_cpp_info["XSCTreeData"].rootpath).as_posix()
         tc.variables["MV_CSCTD_INSTALL_DIR"] = MV_CSCTD_PATH
-        MV_CSCTMD_PATH = pathlib.Path(self.deps_cpp_info["CrossSpeciesComparisonTreeMetaData"].rootpath).as_posix()
+        MV_CSCTMD_PATH = pathlib.Path(self.deps_cpp_info["XSCTreeMetaData"].rootpath).as_posix()
         tc.variables["MV_CSCTMD_INSTALL_DIR"] = MV_CSCTMD_PATH
 
         # Set some build options
@@ -118,7 +118,7 @@ class CrossSpeciesComparisonLoaderPluginConan(ConanFile):
 
     def _configure_cmake(self):
         cmake = CMake(self)
-        cmake.configure(build_script_folder="hdps/CrossSpeciesComparisonLoaderPlugin")
+        cmake.configure(build_script_folder="hdps/XSCLoaderPlugin")
         cmake.verbose = True
         return cmake
 

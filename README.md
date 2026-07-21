@@ -1,1 +1,1 @@
-CrossSpeciesComparisonLoaderPlugin
+XSCLoaderPlugin
