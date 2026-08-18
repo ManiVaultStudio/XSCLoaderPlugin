@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.22)
 
 # -----------------------------------------------------------------------------
-# CrossSpeciesComparisonLoaderPlugin
+# XSCLoaderPlugin
 # -----------------------------------------------------------------------------
-PROJECT("CrossSpeciesComparisonLoaderPlugin")
+PROJECT("XSCLoaderPlugin")
 
 # -----------------------------------------------------------------------------
 # CMake Options
@@ -39,10 +39,10 @@ find_package(ManiVault COMPONENTS Core PointData ClusterData CONFIG QUIET)
 # Source files
 # -----------------------------------------------------------------------------
 # Define the plugin sources
-set(CrossSpeciesComparisonLOADER_SOURCES
-    src/CrossSpeciesComparisonLoaderPlugin.h
-    src/CrossSpeciesComparisonLoaderPlugin.cpp
-    src/CrossSpeciesComparisonLoaderPlugin.json
+set(XSCLOADER_SOURCES
+    src/XSCLoaderPlugin.h
+    src/XSCLoaderPlugin.cpp
+    src/XSCLoaderPlugin.json
 	src/InputDialogCSV.h
     src/InputDialogCSV.cpp
 	src/InputDialogJSON.h
@@ -50,17 +50,17 @@ set(CrossSpeciesComparisonLOADER_SOURCES
 )
 
 set(PLUGIN_MOC_HEADERS
-	src/CrossSpeciesComparisonLoaderPlugin.h
+	src/XSCLoaderPlugin.h
 )
 
-source_group( Plugin FILES ${CrossSpeciesComparisonLOADER_SOURCES})
-source_group( LibUtils FILES ${CrossSpeciesComparisonLOADER_LibUtils})
+source_group( Plugin FILES ${XSCLOADER_SOURCES})
+source_group( LibUtils FILES ${XSCLOADER_LibUtils})
 
 # -----------------------------------------------------------------------------
 # CMake Target
 # -----------------------------------------------------------------------------
 # Create dynamic library for the plugin
-add_library(${PROJECT_NAME} SHARED ${CrossSpeciesComparisonLOADER_SOURCES} ${CrossSpeciesComparisonLOADER_LibUtils})
+add_library(${PROJECT_NAME} SHARED ${XSCLOADER_SOURCES} ${XSCLOADER_LibUtils})
 
 # -----------------------------------------------------------------------------
 # Target include directories
@@ -89,18 +89,18 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Concurrent )
 
 
 # Allow override of plugin library paths from the build system
-set(CROSSSPECIESCOMPARISONTREEDATA_LINK_LIBRARY "${CROSSSPECIESCOMPARISONTREEDATA_LINK_LIBRARY}" CACHE STRING "Path to CrossSpeciesComparisonTreeData library")
-if(NOT CROSSSPECIESCOMPARISONTREEDATA_LINK_LIBRARY)
+set(XSCTREEDATA_LINK_LIBRARY "${XSCTREEDATA_LINK_LIBRARY}" CACHE STRING "Path to XSCTreeData library")
+if(NOT XSCTREEDATA_LINK_LIBRARY)
     set(CSCTDPLUGIN_LINK_PATH "${MV_CSCTD_INSTALL_DIR}/$<CONFIGURATION>/$<IF:$<CXX_COMPILER_ID:MSVC>,lib,Plugins>")
     set(MV_LINK_SUFFIX $<IF:$<CXX_COMPILER_ID:MSVC>,${CMAKE_LINK_LIBRARY_SUFFIX},${CMAKE_SHARED_LIBRARY_SUFFIX}>)
-    set(CROSSSPECIESCOMPARISONTREEDATA_LINK_LIBRARY "${CSCTDPLUGIN_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}CrossSpeciesComparisonTreeData${MV_LINK_SUFFIX}")
+    set(XSCTREEDATA_LINK_LIBRARY "${CSCTDPLUGIN_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}XSCTreeData${MV_LINK_SUFFIX}")
 endif()
 
-set(CROSSSPECIESCOMPARISONTREEMETADATA_LINK_LIBRARY "${CROSSSPECIESCOMPARISONTREEMETADATA_LINK_LIBRARY}" CACHE STRING "Path to CrossSpeciesComparisonTreeMetaData library")
-if(NOT CROSSSPECIESCOMPARISONTREEMETADATA_LINK_LIBRARY)
+set(XSCTREEMETADATA_LINK_LIBRARY "${XSCTREEMETADATA_LINK_LIBRARY}" CACHE STRING "Path to XSCTreeMetaData library")
+if(NOT XSCTREEMETADATA_LINK_LIBRARY)
     set(CSCTMDPLUGIN_LINK_PATH "${MV_CSCTMD_INSTALL_DIR}/$<CONFIGURATION>/$<IF:$<CXX_COMPILER_ID:MSVC>,lib,Plugins>")
     set(MV_LINK_SUFFIX $<IF:$<CXX_COMPILER_ID:MSVC>,${CMAKE_LINK_LIBRARY_SUFFIX},${CMAKE_SHARED_LIBRARY_SUFFIX}>)
-    set(CROSSSPECIESCOMPARISONTREEMETADATA_LINK_LIBRARY "${CSCTMDPLUGIN_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}CrossSpeciesComparisonTreeMetaData${MV_LINK_SUFFIX}")
+    set(XSCTREEMETADATA_LINK_LIBRARY "${CSCTMDPLUGIN_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}XSCTreeMetaData${MV_LINK_SUFFIX}")
 endif()
 
 # Link to ManiVault and data plugins
@@ -108,8 +108,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ManiVault::Core)
 target_link_libraries(${PROJECT_NAME} PRIVATE ManiVault::PointData)
 target_link_libraries(${PROJECT_NAME} PRIVATE ManiVault::ClusterData)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE "${CROSSSPECIESCOMPARISONTREEDATA_LINK_LIBRARY}")
-target_link_libraries(${PROJECT_NAME} PRIVATE "${CROSSSPECIESCOMPARISONTREEMETADATA_LINK_LIBRARY}")
+target_link_libraries(${PROJECT_NAME} PRIVATE "${XSCTREEDATA_LINK_LIBRARY}")
+target_link_libraries(${PROJECT_NAME} PRIVATE "${XSCTREEMETADATA_LINK_LIBRARY}")
 
 # -----------------------------------------------------------------------------
 # Target installation

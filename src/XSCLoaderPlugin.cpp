@@ -1,4 +1,4 @@
-#include "CrossSpeciesComparisonLoaderPlugin.h"
+#include "XSCLoaderPlugin.h"
 
 #include "PointData/PointData.h"
 #include "ClusterData/ClusterData.h"
@@ -26,7 +26,7 @@
 #include <sstream>
 
 
-Q_PLUGIN_METADATA(IID "nl.tudelft.CrossSpeciesComparisonLoaderPlugin")
+Q_PLUGIN_METADATA(IID "nl.tudelft.XSCLoaderPlugin")
 
 using namespace mv;
 
@@ -34,7 +34,7 @@ using namespace mv;
 // View
 // =============================================================================
 
-CrossSpeciesComparisonLoaderPlugin::CrossSpeciesComparisonLoaderPlugin(const PluginFactory* factory):
+XSCLoaderPlugin::XSCLoaderPlugin(const PluginFactory* factory):
     LoaderPlugin(factory),
     _dataSetName("")
 {
@@ -43,7 +43,7 @@ CrossSpeciesComparisonLoaderPlugin::CrossSpeciesComparisonLoaderPlugin(const Plu
     //_infoSettingsAction.setDisabled(true);
 }
 
-CrossSpeciesComparisonLoaderPlugin::~CrossSpeciesComparisonLoaderPlugin(void)
+XSCLoaderPlugin::~XSCLoaderPlugin(void)
 {
     
 }
@@ -53,13 +53,13 @@ CrossSpeciesComparisonLoaderPlugin::~CrossSpeciesComparisonLoaderPlugin(void)
  * This function gets called when an instance of the plugin is created.
  * In this case when someone select the loader option from the menu.
  */
-void CrossSpeciesComparisonLoaderPlugin::init()
+void XSCLoaderPlugin::init()
 {
 
 }
 
 /**
- * Mandatory override function. Gets called when someone selects the CrossSpeciesComparison Loader option
+ * Mandatory override function. Gets called when someone selects the XSC Loader option
  * from the menu containing loader plugins. This function is responsible for opening the
  * file(s) the user wants to open, process them appropriately and pass the final data to the core.
  */
@@ -229,10 +229,10 @@ QJsonObject convertJsonArray(QJsonObject& jsonObject, int& id) {
 }
 
 /*
-void CrossSpeciesComparisonLoaderPlugin::saveBinSet(const BinSet& binSet, const std::string& filename) {
+void XSCLoaderPlugin::saveBinSet(const BinSet& binSet, const std::string& filename) {
     std::ostringstream oss;
     // Write secret signature
-    std::string secretSignature = "CrossSpeciesComparisonSaverPlugin_Signature_Verify";
+    std::string secretSignature = "XSCSaverPlugin_Signature_Verify";
     oss << secretSignature << "\n";
     // Serialize and write DataMain
     oss << binSet.dataMain.rows << "\n";
@@ -297,7 +297,7 @@ void CrossSpeciesComparisonLoaderPlugin::saveBinSet(const BinSet& binSet, const 
 
 
 
-std::pair<BinSet, QString> CrossSpeciesComparisonLoaderPlugin::readBinSet(const std::string& filename) {
+std::pair<BinSet, QString> XSCLoaderPlugin::readBinSet(const std::string& filename) {
     std::ifstream inFile(filename, std::ios::binary);
     if (!inFile) {
         std::cerr << "File could not be opened for reading: " << filename << std::endl;
@@ -320,7 +320,7 @@ std::pair<BinSet, QString> CrossSpeciesComparisonLoaderPlugin::readBinSet(const 
     // Read and check secret signature
     std::string secretSignature;
     std::getline(iss, secretSignature);
-    if (secretSignature != "CrossSpeciesComparisonSaverPlugin_Signature_Verify") {
+    if (secretSignature != "XSCSaverPlugin_Signature_Verify") {
         std::cerr << "Invalid file signature: " << filename << std::endl;
         return { BinSet{}, QString("Invalid file signature: %1").arg(QString::fromStdString(filename)) };
     }
@@ -394,7 +394,7 @@ std::pair<BinSet, QString> CrossSpeciesComparisonLoaderPlugin::readBinSet(const 
 */
 
 
-void CrossSpeciesComparisonLoaderPlugin::loadData()
+void XSCLoaderPlugin::loadData()
 {
 
     //const auto fileName = AskForFileName(QObject::tr("JSON and CSV Files (*.json *.csv)"));
@@ -530,7 +530,7 @@ void CrossSpeciesComparisonLoaderPlugin::loadData()
             InputDialogCSV inputDialog(nullptr, fileNameString, checkTypeValue, uniqueStringColumns);
             inputDialog.setModal(true);
 
-            connect(&inputDialog, &InputDialogCSV::closeDialogCSV, this, &CrossSpeciesComparisonLoaderPlugin::dialogClosedCSV);
+            connect(&inputDialog, &InputDialogCSV::closeDialogCSV, this, &XSCLoaderPlugin::dialogClosedCSV);
 
 
             int inputOk = inputDialog.exec();
@@ -580,11 +580,11 @@ void CrossSpeciesComparisonLoaderPlugin::loadData()
 
             // Gather some knowledge about the data from the user
             auto fileNameString = fileName.toStdString();
-            //checkTypeValue = "None"; //"CrossSpeciesComparisonTree" or "Trait" or "None"
+            //checkTypeValue = "None"; //"XSCTree" or "Trait" or "None"
             InputDialogJSON inputDialog(nullptr, fileNameString, message);
             inputDialog.setModal(true);
 
-            connect(&inputDialog, &InputDialogJSON::closeDialogJSON, this, &CrossSpeciesComparisonLoaderPlugin::dialogClosedJSON);
+            connect(&inputDialog, &InputDialogJSON::closeDialogJSON, this, &XSCLoaderPlugin::dialogClosedJSON);
 
 
             int inputOk = inputDialog.exec();
@@ -601,7 +601,7 @@ void CrossSpeciesComparisonLoaderPlugin::loadData()
     InputDialogCSCBIN inputDialog(nullptr, fileNameString, message);
     inputDialog.setModal(true);
 
-    connect(&inputDialog, &InputDialogCSCBIN::closeDialogCSCBIN, this, &CrossSpeciesComparisonLoaderPlugin::dialogClosedCSCBIN);
+    connect(&inputDialog, &InputDialogCSCBIN::closeDialogCSCBIN, this, &XSCLoaderPlugin::dialogClosedCSCBIN);
 
     int inputOk = inputDialog.exec();
         }
@@ -695,17 +695,17 @@ void storeColumns(const std::vector<QStringList>& loadedData, std::map<int, std:
     }
 }
 
-void CrossSpeciesComparisonLoaderPlugin::dialogClosedJSON(QString dataSetName, QString typeName)
+void XSCLoaderPlugin::dialogClosedJSON(QString dataSetName, QString typeName)
 {
     // Generate distance matrix
     std::vector<std::vector<float>> distanceMatrix = generateDistanceMatrix(_speciesOrder, _speciesNames);
 
-    Dataset<CrossSpeciesComparisonTree> treeDataset = mv::data().createDataset("CrossSpeciesComparisonTree", dataSetName + "_Tree");
+    Dataset<XSCTree> treeDataset = mv::data().createDataset("XSCTree", dataSetName + "_Tree");
     events().notifyDatasetAdded(treeDataset);
     treeDataset->setTreeData(_treeData);
     QJsonDocument jsonDoc(_treeData);
     QString jsonString = jsonDoc.toJson();
-    //auto data= treeDataset->getFullDataset<CrossSpeciesComparisonTree>()->getData();
+    //auto data= treeDataset->getFullDataset<XSCTree>()->getData();
 
     /*auto datasetName = dataSetName + "_Tree";
     Dataset<Points> valuesDataset = mv::data().createDataset("Points", datasetName);
@@ -757,7 +757,7 @@ void CrossSpeciesComparisonLoaderPlugin::dialogClosedJSON(QString dataSetName, Q
     
 }
 
-void CrossSpeciesComparisonLoaderPlugin::dialogClosedCSCBIN(QString dataSetName, QString TypeName)
+void XSCLoaderPlugin::dialogClosedCSCBIN(QString dataSetName, QString TypeName)
 {
 
  
@@ -830,7 +830,7 @@ void CrossSpeciesComparisonLoaderPlugin::dialogClosedCSCBIN(QString dataSetName,
 
 }
 
-std::vector<QString> CrossSpeciesComparisonLoaderPlugin::extractStringColumnValues(int columnIndex) {
+std::vector<QString> XSCLoaderPlugin::extractStringColumnValues(int columnIndex) {
     std::vector<QString> columnValues;
 
     // Check if the column index is valid
@@ -847,7 +847,7 @@ std::vector<QString> CrossSpeciesComparisonLoaderPlugin::extractStringColumnValu
     return columnValues;
 }
 
-std::vector<float> CrossSpeciesComparisonLoaderPlugin::extractNumericColumnValues(int columnIndex) {
+std::vector<float> XSCLoaderPlugin::extractNumericColumnValues(int columnIndex) {
     std::vector<float> columnValues;
 
     // Check if the column index is valid
@@ -871,7 +871,7 @@ std::vector<float> CrossSpeciesComparisonLoaderPlugin::extractNumericColumnValue
     return columnValues;
 }
 
-std::pair<std::vector<int>, std::vector<int>> CrossSpeciesComparisonLoaderPlugin::getColumnIndexes() {
+std::pair<std::vector<int>, std::vector<int>> XSCLoaderPlugin::getColumnIndexes() {
     std::vector<int> stringColumnIndexes;
     std::vector<int> numericColumnIndexes;
 
@@ -902,7 +902,7 @@ std::pair<std::vector<int>, std::vector<int>> CrossSpeciesComparisonLoaderPlugin
 }
 
 
-std::tuple<std::vector<int>, std::vector<int>, std::vector<int>> CrossSpeciesComparisonLoaderPlugin::getValueIndexes() {
+std::tuple<std::vector<int>, std::vector<int>, std::vector<int>> XSCLoaderPlugin::getValueIndexes() {
     std::vector<int> stringColumnIndexes;
     std::vector<int> numericColumnIndexes;
     std::vector<int> colorColumnIndexes;
@@ -964,7 +964,7 @@ QString mapToJsonString(const std::map<QString, std::map<QString, std::map<QStri
     QJsonDocument doc(obj);
     return doc.toJson(QJsonDocument::Compact);
 }
-void CrossSpeciesComparisonLoaderPlugin::dialogClosedCSV(QString dataSetName, QString typeName,QString leafColumn)
+void XSCLoaderPlugin::dialogClosedCSV(QString dataSetName, QString typeName,QString leafColumn)
 {
 
 
@@ -1084,7 +1084,7 @@ void CrossSpeciesComparisonLoaderPlugin::dialogClosedCSV(QString dataSetName, QS
 
             QString jsonString = mapToJsonString(metaDataMap);
             //qDebug() << "JSON String:" << jsonString;
-            Dataset<CrossSpeciesComparisonTreeMeta> metaValuesDataset = mv::data().createDataset("CrossSpeciesComparisonTreeMeta", dataSetName);
+            Dataset<XSCTreeMeta> metaValuesDataset = mv::data().createDataset("XSCTreeMeta", dataSetName);
             events().notifyDatasetAdded(metaValuesDataset);
 
 
@@ -1123,9 +1123,9 @@ void CrossSpeciesComparisonLoaderPlugin::dialogClosedCSV(QString dataSetName, QS
 
     std::string realType= typeName.toStdString();
 
-    if(checkTypeValue == "CrossSpeciesComparisonTree" && realType == "CrossSpeciesComparisonTree")
+    if(checkTypeValue == "XSCTree" && realType == "XSCTree")
     {
-        if (checkTypeValue == "CrossSpeciesComparisonTree")
+        if (checkTypeValue == "XSCTree")
         {
 
 
@@ -1150,7 +1150,7 @@ void CrossSpeciesComparisonLoaderPlugin::dialogClosedCSV(QString dataSetName, QS
     }
     else
     {
-        if (checkTypeValue == "Meta" || (checkTypeValue == "CrossSpeciesComparisonTree"))
+        if (checkTypeValue == "Meta" || (checkTypeValue == "XSCTree"))
         {
             _numericColumnValues.clear();
             _stringColumnStrings.clear();
@@ -1240,17 +1240,17 @@ void CrossSpeciesComparisonLoaderPlugin::dialogClosedCSV(QString dataSetName, QS
 }
 
 
-CrossSpeciesComparisonLoaderPluginFactory::CrossSpeciesComparisonLoaderPluginFactory()
+XSCLoaderPluginFactory::XSCLoaderPluginFactory()
 {
     setIconByName("upload");
 }
 
-CrossSpeciesComparisonLoaderPlugin* CrossSpeciesComparisonLoaderPluginFactory::produce()
+XSCLoaderPlugin* XSCLoaderPluginFactory::produce()
 {
-    return new CrossSpeciesComparisonLoaderPlugin(this);
+    return new XSCLoaderPlugin(this);
 }
 
-mv::DataTypes CrossSpeciesComparisonLoaderPluginFactory::supportedDataTypes() const
+mv::DataTypes XSCLoaderPluginFactory::supportedDataTypes() const
 {
     DataTypes supportedTypes;
     supportedTypes.append(PointType);

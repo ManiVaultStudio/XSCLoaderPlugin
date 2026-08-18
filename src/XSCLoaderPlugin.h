@@ -7,8 +7,8 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
-#include "CrossSpeciesComparisonTreeData/CrossSpeciesComparisonTreeData.h"
-#include "CrossSpeciesComparisonTreeMetaData/CrossSpeciesComparisonTreeMetaData.h"
+#include "XSCTreeData/XSCTreeData.h"
+#include "XSCTreeMetaData/XSCTreeMetaData.h"
 
 #include <QRandomGenerator>
 #include <QtMath>
@@ -62,12 +62,12 @@ struct ClusterInput {
     std::string value2;
     std::string cluster;
 };
-class CrossSpeciesComparisonLoaderPlugin : public LoaderPlugin
+class XSCLoaderPlugin : public LoaderPlugin
 {
     Q_OBJECT
 public:
-    CrossSpeciesComparisonLoaderPlugin(const PluginFactory* factory);
-    ~CrossSpeciesComparisonLoaderPlugin(void) override;
+    XSCLoaderPlugin(const PluginFactory* factory);
+    ~XSCLoaderPlugin(void) override;
     
     void init() override;
 
@@ -115,17 +115,17 @@ private:
 // Factory
 // =============================================================================
 
-class CrossSpeciesComparisonLoaderPluginFactory : public LoaderPluginFactory
+class XSCLoaderPluginFactory : public LoaderPluginFactory
 {
     Q_INTERFACES(mv::plugin::LoaderPluginFactory mv::plugin::PluginFactory)
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID   "nl.tudelft.CrossSpeciesComparisonLoaderPlugin"
-                      FILE  "CrossSpeciesComparisonLoaderPlugin.json")
+    Q_PLUGIN_METADATA(IID   "nl.tudelft.XSCLoaderPlugin"
+                      FILE  "XSCLoaderPlugin.json")
     
 public:
-    CrossSpeciesComparisonLoaderPluginFactory(void);
-    ~CrossSpeciesComparisonLoaderPluginFactory(void) override {}
-    CrossSpeciesComparisonLoaderPlugin* produce() override;
+    XSCLoaderPluginFactory(void);
+    ~XSCLoaderPluginFactory(void) override {}
+    XSCLoaderPlugin* produce() override;
 
     mv::DataTypes supportedDataTypes() const override;
 };
