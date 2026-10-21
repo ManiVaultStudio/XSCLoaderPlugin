@@ -164,7 +164,6 @@ class XSCLoaderPluginConan(ConanFile):
     def package(self):
         package_dir = pathlib.Path(self.build_folder, "package")
         relWithDebInfo_dir = package_dir / "RelWithDebInfo"
-        release_dir = package_dir / "Release"
         print("Packaging install dir: ", package_dir)
         subprocess.run(
             [
