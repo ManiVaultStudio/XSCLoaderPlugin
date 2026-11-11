@@ -3,8 +3,8 @@ human,HomSap,Homo sapiens,Human,Human,human,9606,#a6ac4b,1,Euarchonta,#a6ac4b,Ho
 chimp,PanTro,Pan troglodytes,Chimpanzee,Chimpanzee,chimp,9598,#6f7620,2,Euarchonta,#a6ac4b,Hominid,#a6ac4b,6,354.8,"60,433",0.22,,,,,scansorial,5
 gorilla,GorGor,Gorilla gorilla gorilla,Western lowland gorilla,Gorilla,gorilla,9595,#c9e343,3,Euarchonta,#a6ac4b,Hominid,#a6ac4b,7,454.6,"120,975",0.11,,,,,other,5
 rhesus_macaque,MacMul,Macaca mulatta,Rhesus macaque,Rhesus macaque,macaque_rhesus,9544,#87ab52,4,Euarchonta,#a6ac4b,Cercopithecid,#87ab52,28,88,"4,613",0.46,1710000000,5270000000,6376160000,7162900000,scansorial,6
-macaque_nemestrina,MacNem,Macaca nemestrina,Southern pig-tailed macaque,Pig-tailed macaque,macaque_nemestrina,9545,#98cd48,5,Euarchonta,#a6ac4b,Cercopithecid,#87ab52,28,110,"4,456",0.56,,,,,scansorial,6
-baboon,PapAnu,Papio anubis,Olive baboon,Baboon,baboon,9555,#649932,6,Euarchonta,#a6ac4b,Cercopithecid,#87ab52,28,152.4,"13,300",0.35,2875028372,7569751628,10948086440,9175538564,other,6
+pig_tailed_macaque,MacNem,Macaca nemestrina,Southern pig-tailed macaque,Pig-tailed macaque,macaque_nemestrina,9545,#98cd48,5,Euarchonta,#a6ac4b,Cercopithecid,#87ab52,28,110,"4,456",0.56,,,,,scansorial,6
+olive_baboon,PapAnu,Papio anubis,Olive baboon,Baboon,baboon,9555,#649932,6,Euarchonta,#a6ac4b,Cercopithecid,#87ab52,28,152.4,"13,300",0.35,2875028372,7569751628,10948086440,9175538564,other,6
 african_green_monkey,ChlSab,Chlorocebus sabaeus,African green monkey,Green monkey,african_green_monkey,60711,#76ea3d,7,Euarchonta,#a6ac4b,Cercopithecid,#87ab52,28,64.9,"4,312",0.35,,,,,scansorial,6
 south_american_squirrel_monkey,SaiBol,Saimiri boliviensis boliviensis,Black-capped squirrel monkey,Squirrel monkey,squirrel_monkey,39432,#306519,8,Euarchonta,#a6ac4b,Platyrrhine,#306519,39,24.1,750,0.48,1340000000,1610000000,3246430000,2073030000,scansorial,5
 capuchin,SapApe,Sapajus apella,Tufted capuchin,Capuchin,capuchin,9516,#99d785,9,Euarchonta,#a6ac4b,Platyrrhine,#306519,39,70.1,"2,105",0.61,1140000000,2550000000,3690520000,3297740000,scansorial,5
