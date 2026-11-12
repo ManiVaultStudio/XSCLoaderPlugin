@@ -66,7 +66,9 @@ void XSCLoaderPlugin::init()
 
 bool areAllStrings(const QStringList& list) {
     for (const QString& str : list) {
-        if (str.toInt() != 0 || str.isEmpty()) {
+        bool numeric = false;
+        str.toDouble(&numeric);
+        if (numeric || str.trimmed().isEmpty()) {
             // If conversion to int is successful or the string is empty,
             // it's not a pure string value
             return false;
@@ -79,8 +81,9 @@ bool areAllStrings(const QStringList& list) {
 
 bool areAllNumeric(const QStringList& list) {
     for (const QString& str : list) {
-        if (str.isEmpty() || str.toInt() == 0) {
-            // If conversion to int is unsuccessful or the result is zero, it's not a numeric value
+        bool numeric = false;
+        str.toDouble(&numeric);
+        if (!numeric) {
             return false;
         }
     }
@@ -417,6 +420,7 @@ void XSCLoaderPlugin::loadData()
             throw DataLoadException(fileName, "File was not found at location.");
 
         if (fileName.endsWith(".csv")) {
+            _loadedData.clear();
             qDebug() << "Loading CSV file: " << fileName;
 
 
@@ -426,6 +430,8 @@ void XSCLoaderPlugin::loadData()
                 // Read data from the file
                 while (!in.atEnd()) {
                     QString line = in.readLine();
+                    if (line.trimmed().isEmpty())
+                        continue;
                     QRegularExpression regex("\"([0-9]+),([0-9]+)\"");
                     line.replace(regex, "\\1\\2");
                     line.replace("\"", "");
@@ -464,6 +470,8 @@ void XSCLoaderPlugin::loadData()
                     }
                 }
             }
+            if (_loadedData.size() < 2 || _loadedData.front().isEmpty())
+                throw DataLoadException(fileName, "CSV requires a header and at least one data row.");
             //  Extract header row 
             QStringList headerRow = _loadedData[0];
             std::map<QString, int> headerCount;
@@ -538,6 +546,7 @@ void XSCLoaderPlugin::loadData()
 
         }
         else if (fileName.endsWith(".json")) {
+            _treeData = QJsonObject{};
             qDebug() << "Loading JSON file: " << fileName;
             /*
              QString jsonInput = R"([
@@ -569,13 +578,11 @@ void XSCLoaderPlugin::loadData()
                     message = "Processed";
                 }
                 else {
-                    qDebug() << "Document is not an array";
-                    message = "Document is not an array";
+                    throw DataLoadException(fileName, "Expected a JSON object.");
                 }
             }
             else {
-                qDebug() << "Invalid JSON...\n";// << jsonData;
-                message = "Invalid JSON...";
+                throw DataLoadException(fileName, "Invalid JSON.");
             }
 
             // Gather some knowledge about the data from the user
@@ -834,7 +841,7 @@ std::vector<QString> XSCLoaderPlugin::extractStringColumnValues(int columnIndex)
     std::vector<QString> columnValues;
 
     // Check if the column index is valid
-    if (columnIndex < 0 || columnIndex >= _loadedData[0].size()) {
+    if (_loadedData.empty() || columnIndex < 0 || columnIndex >= _loadedData.front().size()) {
         qWarning() << "Invalid column index: " << columnIndex;
         return columnValues;
     }
@@ -851,7 +858,7 @@ std::vector<float> XSCLoaderPlugin::extractNumericColumnValues(int columnIndex) 
     std::vector<float> columnValues;
 
     // Check if the column index is valid
-    if (columnIndex < 0 || columnIndex >= _loadedData[0].size()) {
+    if (_loadedData.empty() || columnIndex < 0 || columnIndex >= _loadedData.front().size()) {
         qWarning() << "Invalid column index: " << columnIndex;
         return columnValues;
     }
