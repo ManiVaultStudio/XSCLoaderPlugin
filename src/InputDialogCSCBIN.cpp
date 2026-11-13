@@ -1,3 +1,5 @@
+#include <QStyle>
+#include "QtTooltipKit.h"
 #include "InputDialogCSCBIN.h"
 #include "PointData/PointData.h"
 
@@ -26,9 +28,13 @@ InputDialogCSCBIN::InputDialogCSCBIN(QWidget* parent, std::string& filePath,QStr
         messageValue->setStyleSheet("QLabel { color : red;  font-size: 12pt; }");  // Adjust styles as needed
     }
     addButton = new QPushButton(tr("add file"));
+    addButton->setIcon(style()->standardIcon(QStyle::SP_DialogOpenButton));
+    qttooltipkit::set(*addButton, tr("Import dataset"), tr("Load the selected file using the options in this dialog."));
     addButton->setDefault(true);
 
     okButton = new QPushButton(tr("close"));
+    okButton->setIcon(style()->standardIcon(QStyle::SP_DialogCloseButton));
+    qttooltipkit::set(*okButton, tr("Close importer"), tr("Dismiss this dialog."));
     okButton->setDefault(true);
 
     connect(okButton, &QPushButton::pressed, this, &InputDialogCSCBIN::okDialogAction);

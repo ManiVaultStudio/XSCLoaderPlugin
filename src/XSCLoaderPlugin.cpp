@@ -1249,7 +1249,7 @@ void XSCLoaderPlugin::dialogClosedCSV(QString dataSetName, QString typeName,QStr
 
 XSCLoaderPluginFactory::XSCLoaderPluginFactory()
 {
-    setIconByName("upload");
+    setIconByName("file-import");
 }
 
 XSCLoaderPlugin* XSCLoaderPluginFactory::produce()

@@ -1,3 +1,5 @@
+#include <QStyle>
+#include "QtTooltipKit.h"
 #include "InputDialogCSV.h"
 #include "PointData/PointData.h"
 
@@ -36,6 +38,8 @@ InputDialogCSV::InputDialogCSV(QWidget* parent, std::string& filePath, std::stri
         messageValue->setStyleSheet("QLabel { color : red;  font-size: 12pt; }");  // Adjust styles as needed
     }
     addButton = new QPushButton(tr("add file"));
+    addButton->setIcon(style()->standardIcon(QStyle::SP_DialogOpenButton));
+    qttooltipkit::set(*addButton, tr("Import dataset"), tr("Load the selected file using the options in this dialog."));
     addButton->setDefault(true);
 
 
@@ -45,9 +49,12 @@ InputDialogCSV::InputDialogCSV(QWidget* parent, std::string& filePath, std::stri
     //allDataType->setChecked(true);
 
     okButton = new QPushButton(tr("close"));
+    okButton->setIcon(style()->standardIcon(QStyle::SP_DialogCloseButton));
+    qttooltipkit::set(*okButton, tr("Close importer"), tr("Dismiss this dialog."));
     okButton->setDefault(true);
     _leafOptionValues = new QComboBox();
     _leafOptionValues->addItems(headers);
+    qttooltipkit::set(*_leafOptionValues, tr("Species identifier column"), tr("Choose the CSV column whose values match the leaf names in your reference tree."));
 
     _leafOptionValues->setCurrentIndex(0);
 
