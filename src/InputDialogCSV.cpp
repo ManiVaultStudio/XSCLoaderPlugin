@@ -6,38 +6,35 @@
 InputDialogCSV::InputDialogCSV(QWidget* parent, std::string& filePath, std::string checkTypeValue, QStringList headers) :
     QDialog(parent)
 {
-    setWindowTitle(tr("Cross Species Comparison Data Loader"));
+    setWindowTitle(tr("Import CSV dataset"));
     std::string fullfileName = filePath.substr(filePath.find_last_of("/\\") + 1);
     _dataNameValue = new QLineEdit();
     _dataNameValue->setText(QString::fromStdString(fullfileName.substr(0, (fullfileName.find_last_of(".")))));
 
     messageValue = new QLabel();  // Use QLabel instead of QLineEdit
-    messageValue->setWordWrap(false);  // Allow text to wrap within QLabel
+    messageValue->setWordWrap(true);
     messageValue->setAlignment(Qt::AlignTop | Qt::AlignCenter); // Adjust alignment as needed
     messageValue->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
 
     if (checkTypeValue == "AllData")
     {
-        messageValue->setText("Please choose the option below:");
-        messageValue->setStyleSheet("QLabel { color : black; font-size: 12pt; }");  // Adjust styles as needed
+        messageValue->setText("Choose how to import this CSV.");
     }
     else if (checkTypeValue == "MetaData")
     {
-        messageValue->setText("Data can can be loaded as metadata!");
-        messageValue->setStyleSheet("QLabel { color : black;  font-size: 12pt; }");  // Adjust styles as needed
+        messageValue->setText("This CSV contains species metadata.");
     }
     else if (checkTypeValue == "NormalData")
     {
-        messageValue->setText("Data can can be loaded as point and cluster data!");
-        messageValue->setStyleSheet("QLabel { color : black;  font-size: 12pt; }");  // Adjust styles as needed
+        messageValue->setText("This CSV contains point and cluster data.");
     }
     else
     {
-        messageValue->setText("Data cannot be loaded! Please check the data format and try again.");
+        messageValue->setText("This CSV format could not be read.");
         messageValue->setStyleSheet("QLabel { color : red;  font-size: 12pt; }");  // Adjust styles as needed
     }
-    addButton = new QPushButton(tr("add file"));
+    addButton = new QPushButton(tr("Import"));
     addButton->setIcon(style()->standardIcon(QStyle::SP_DialogOpenButton));
     qttooltipkit::set(*addButton, tr("Import dataset"), tr("Load the selected file using the options in this dialog."));
     addButton->setDefault(true);
@@ -48,7 +45,7 @@ InputDialogCSV::InputDialogCSV(QWidget* parent, std::string& filePath, std::stri
     metaDataType->setChecked(true);
     //allDataType->setChecked(true);
 
-    okButton = new QPushButton(tr("close"));
+    okButton = new QPushButton(tr("Close"));
     okButton->setIcon(style()->standardIcon(QStyle::SP_DialogCloseButton));
     qttooltipkit::set(*okButton, tr("Close importer"), tr("Dismiss this dialog."));
     okButton->setDefault(true);
@@ -103,7 +100,7 @@ InputDialogCSV::InputDialogCSV(QWidget* parent, std::string& filePath, std::stri
 
 
 
-            auto labelDataTypeValue = new QLabel(tr("Data type: "));
+            auto labelDataTypeValue = new QLabel(tr("Import as"));
             layout->addWidget(labelDataTypeValue);
             layout->addLayout(dataTypeLayout);
 
@@ -120,7 +117,7 @@ InputDialogCSV::InputDialogCSV(QWidget* parent, std::string& filePath, std::stri
         }
         else
         {
-            auto leafnamesTypeValue = new QLabel(tr("Leaf names: "));
+            auto leafnamesTypeValue = new QLabel(tr("Species column"));
             layout->addWidget(leafnamesTypeValue);
             layout->addWidget(_leafOptionValues);
 
